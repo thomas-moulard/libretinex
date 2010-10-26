@@ -40,6 +40,9 @@ FIND_PACKAGE(Boost 1.40
 
 # Install headers.
 SET(${PROJECT_NAME}_HEADERS
+    include/libretinex.hh
+    include/libretinex/doc.hh
+    include/libretinex/fwd.hh
     include/libretinex/retinex.hh
 )
 
@@ -47,6 +50,7 @@ SET(${PROJECT_NAME}_HEADERS
 ADD_SUBDIRECTORY(src)
 
 ADD_SUBDIRECTORY(bin)
+ADD_SUBDIRECTORY(doc)
 # ADD_SUBDIRECTORY(tests)
 
 SETUP_PROJECT_FINALIZE()

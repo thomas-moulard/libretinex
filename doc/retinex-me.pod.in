@@ -1,0 +1,35 @@
+=head1 NAME
+
+retinex-me - Stack of tasks shell
+
+
+=head1 SYNOPSIS
+
+retinex-me -i infile -o outfile
+
+
+=head1 DESCRIPTION
+
+This programs uses the Retinex algorithm to normalize the luminance of
+an image.
+
+Two arguments are required: an input file and an output file.
+
+Image reading and writing is delegated to the ViSP image processing
+library. This library currently supports JPEG, PNG and PNM (P5, P7)
+formats. See the ViSP documentation for more information.
+
+
+=head1 AUTHORS
+
+This software has been developed at CNRS/AIST and LAAS-CNRS laboratories.
+
+See <@CMAKE_INSTALL_PREFIX@/share/doc/libretinex-dev/AUTHORS> to
+see the list of all contributors.
+
+=head1 SEE ALSO
+
+ViSP documentation is available on its website
+<http://www.irisa.fr/lagadic/visp/visp.html>.
+
+See also <@PROJECT_URL@> for additional resources.

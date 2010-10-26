@@ -21,11 +21,23 @@
 
 namespace libretinex
 {
-  typedef boost::numeric::converter<value_t,double> toValueType;
+  // This converter convert a double into value_t (i.e. unsigned char)
+  // without throwing when bounds are overflowed.
+  // Default behavior of Boost.numeric_conversion is this case
+  // is to emit an exception which is not required here.
+  // Do *not* use this converter if too low/high values truncation are
+  // an issue.
+  typedef boost::numeric::converter
+  <value_t,
+   double,
+   boost::numeric::conversion_traits<value_t, double>,
+   boost::numeric::silent_overflow_handler> toValueType;
+
   typedef boost::numeric::converter<unsigned int,double> toUnsignedInt;
 
   namespace
   {
+    /// \brief Compute the image mean value.
     double imageMean (const image_t& image)
     {
       if (!image.getHeight () || !image.getWidth ())
@@ -38,6 +50,7 @@ namespace libretinex
       return sum / (image.getWidth () * image.getHeight ());
     }
 
+    /// \brief Compute the image maximum value.
     value_t imageMax (const image_t& image)
     {
       value_t res = 0;
@@ -47,6 +60,7 @@ namespace libretinex
       return res;
     }
 
+    /// \brief Compute the image minimum value.
     value_t imageMin (const image_t& image)
     {
       value_t res = std::numeric_limits<value_t>::max ();
@@ -58,7 +72,8 @@ namespace libretinex
   } // end of anonymous namespace.
 
   Retinex::Retinex (const image_t& image)
-    : outputImage_ (image)
+    : done_ (false),
+      outputImage_ (image)
   {}
 
   Retinex::~Retinex ()
@@ -68,10 +83,14 @@ namespace libretinex
   const image_t&
   Retinex::outputImage ()
   {
-    applyLa (sigma_1);
-    applyLa (sigma_2);
-    applyDoG ();
-    applyNormalization ();
+    if (!done_)
+      {
+	applyLa (sigma_1);
+	applyLa (sigma_2);
+	applyDoG ();
+	applyNormalization ();
+	done_ = true;
+      }
     return this->outputImage_;
   }
 
