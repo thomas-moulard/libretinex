@@ -30,6 +30,7 @@
 </div>
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <h1>libretinex::Retinex Class Reference</h1>  </div>
@@ -43,21 +44,78 @@
 
 <p><a href="classlibretinex_1_1_retinex-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibretinex_1_1_retinex.html#a37c1d6e43f2d8311cc095afdaebad964">Steps</a> { <br/>
+&#160;&#160;<a class="el" href="classlibretinex_1_1_retinex.html#a37c1d6e43f2d8311cc095afdaebad964abcf808063f4bc295bc1d6f4b7f5454a4">NOTHING</a> =  0, 
+<br/>
+&#160;&#160;<a class="el" href="classlibretinex_1_1_retinex.html#a37c1d6e43f2d8311cc095afdaebad964a2572cd77399436f43dc9854cf0c53b5f">LA1</a>, 
+<br/>
+&#160;&#160;<a class="el" href="classlibretinex_1_1_retinex.html#a37c1d6e43f2d8311cc095afdaebad964a42f9bdf194f9e4f6b922a744e73e452a">LA2</a>, 
+<br/>
+&#160;&#160;<a class="el" href="classlibretinex_1_1_retinex.html#a37c1d6e43f2d8311cc095afdaebad964a2df19081b9ed28550ce5c79f31c84be9">DOG</a>, 
+<br/>
+&#160;&#160;<a class="el" href="classlibretinex_1_1_retinex.html#a37c1d6e43f2d8311cc095afdaebad964a3c4bf31a119860d08c3465883d9b62f3">NORMALIZE</a>, 
+<br/>
+&#160;&#160;<a class="el" href="classlibretinex_1_1_retinex.html#a37c1d6e43f2d8311cc095afdaebad964a4829c637d96402ab0ae6f6a9a09fd899">DONE</a> =  NORMALIZE
+<br/>
+ }</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><p>Describe the different steps of the algorithm. </p>
+ <a href="classlibretinex_1_1_retinex.html#a37c1d6e43f2d8311cc095afdaebad964">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibretinex_1_1_retinex.html#a677b78ae80911a284c88067e3de70b9b">Retinex</a> (const <a class="el" href="namespacelibretinex.html#a48a6c29570126852b0bba0355921d7df">image_t</a> &amp;image)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiate the algorithm using an input image.  <a href="#a677b78ae80911a284c88067e3de70b9b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibretinex_1_1_retinex.html#af56a69df66197c54d40f40407f642586">Retinex</a> (const <a class="el" href="namespacelibretinex.html#a48a6c29570126852b0bba0355921d7df">image_t</a> &amp;image, unsigned verbosity=0)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiate the algorithm using an input image.  <a href="#af56a69df66197c54d40f40407f642586"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibretinex_1_1_retinex.html#a1e99ffdb876d135f7f202b1186515d95">~Retinex</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespacelibretinex.html#a48a6c29570126852b0bba0355921d7df">image_t</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibretinex_1_1_retinex.html#a2f8f598b6e9eb75e5b45941350157e29">outputImage</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The output image.  <a href="#a2f8f598b6e9eb75e5b45941350157e29"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespacelibretinex.html#a48a6c29570126852b0bba0355921d7df">image_t</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibretinex_1_1_retinex.html#ad41a8b28389efd25484434176fc0f1a3">outputImage</a> (<a class="el" href="classlibretinex_1_1_retinex.html#a37c1d6e43f2d8311cc095afdaebad964">Steps</a> stopAfter=DONE)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The output image.  <a href="#ad41a8b28389efd25484434176fc0f1a3"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>This class implements the retinex library: it takes an image a gray image as input and produces a gray image as output. </p>
 <p>There is no parameters to set.</p>
 <p>This class implements the <a class="el" href="classlibretinex_1_1_retinex.html" title="This class implements the retinex library: it takes an image a gray image as input and produces a gra...">Retinex</a> algorithm as stated in the ``Normalisation d'illumination basée sur un modèle de rétine: application à la reconnaissance de visage.'' by Ngoc-Son Vu and Alice Caplier.</p>
 <p>This algorithm normalizes the illumination of a gray image through the use of two non-linear functions and a difference of Gaussians filter. </p>
+<hr/><h2>Member Enumeration Documentation</h2>
+<a class="anchor" id="a37c1d6e43f2d8311cc095afdaebad964"></a><!-- doxytag: member="libretinex::Retinex::Steps" ref="a37c1d6e43f2d8311cc095afdaebad964" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classlibretinex_1_1_retinex.html#a37c1d6e43f2d8311cc095afdaebad964">libretinex::Retinex::Steps</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Describe the different steps of the algorithm. </p>
+<p>Used to ask for a non-complete processing of the input image. </p>
+<dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a37c1d6e43f2d8311cc095afdaebad964abcf808063f4bc295bc1d6f4b7f5454a4"></a><!-- doxytag: member="NOTHING" ref="a37c1d6e43f2d8311cc095afdaebad964abcf808063f4bc295bc1d6f4b7f5454a4" args="" -->NOTHING</em>&nbsp;</td><td>
+<p>Nothing has been done. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a37c1d6e43f2d8311cc095afdaebad964a2572cd77399436f43dc9854cf0c53b5f"></a><!-- doxytag: member="LA1" ref="a37c1d6e43f2d8311cc095afdaebad964a2572cd77399436f43dc9854cf0c53b5f" args="" -->LA1</em>&nbsp;</td><td>
+<p>The first logarithmic compression has been applied. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a37c1d6e43f2d8311cc095afdaebad964a42f9bdf194f9e4f6b922a744e73e452a"></a><!-- doxytag: member="LA2" ref="a37c1d6e43f2d8311cc095afdaebad964a42f9bdf194f9e4f6b922a744e73e452a" args="" -->LA2</em>&nbsp;</td><td>
+<p>The second logarithmic compression has been applied. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a37c1d6e43f2d8311cc095afdaebad964a2df19081b9ed28550ce5c79f31c84be9"></a><!-- doxytag: member="DOG" ref="a37c1d6e43f2d8311cc095afdaebad964a2df19081b9ed28550ce5c79f31c84be9" args="" -->DOG</em>&nbsp;</td><td>
+<p>The difference of Gaussians filter has been applied. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a37c1d6e43f2d8311cc095afdaebad964a3c4bf31a119860d08c3465883d9b62f3"></a><!-- doxytag: member="NORMALIZE" ref="a37c1d6e43f2d8311cc095afdaebad964a3c4bf31a119860d08c3465883d9b62f3" args="" -->NORMALIZE</em>&nbsp;</td><td>
+<p>The normalization and post-processing steps has been applied. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a37c1d6e43f2d8311cc095afdaebad964a4829c637d96402ab0ae6f6a9a09fd899"></a><!-- doxytag: member="DONE" ref="a37c1d6e43f2d8311cc095afdaebad964a4829c637d96402ab0ae6f6a9a09fd899" args="" -->DONE</em>&nbsp;</td><td>
+<p>Processing is finished (equivalent to NORMALIZE). </p>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+</div>
+</div>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a677b78ae80911a284c88067e3de70b9b"></a><!-- doxytag: member="libretinex::Retinex::Retinex" ref="a677b78ae80911a284c88067e3de70b9b" args="(const image_t &amp;image)" -->
+<a class="anchor" id="af56a69df66197c54d40f40407f642586"></a><!-- doxytag: member="libretinex::Retinex::Retinex" ref="af56a69df66197c54d40f40407f642586" args="(const image_t &amp;image, unsigned verbosity=0)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -65,8 +123,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname">libretinex::Retinex::Retinex </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacelibretinex.html#a48a6c29570126852b0bba0355921d7df">image_t</a> &amp;&#160;</td>
-          <td class="paramname"> <em>image</em>&#160;)</td>
-          <td><code> [explicit]</code></td>
+          <td class="paramname"> <em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"> <em>verbosity</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [explicit]</code></td>
         </tr>
       </table>
 </div>
@@ -76,6 +144,7 @@ Public Member Functions</h2></td></tr>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">image</td><td>the input image (will not be modified). </td></tr>
+    <tr><td class="paramname">verbosity</td><td>controls how much information will be displayed (0 means quiet). </td></tr>
   </table>
   </dd>
 </dl>
@@ -99,14 +168,15 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a2f8f598b6e9eb75e5b45941350157e29"></a><!-- doxytag: member="libretinex::Retinex::outputImage" ref="a2f8f598b6e9eb75e5b45941350157e29" args="()" -->
+<a class="anchor" id="ad41a8b28389efd25484434176fc0f1a3"></a><!-- doxytag: member="libretinex::Retinex::outputImage" ref="ad41a8b28389efd25484434176fc0f1a3" args="(Steps stopAfter=DONE)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">const <a class="el" href="namespacelibretinex.html#a48a6c29570126852b0bba0355921d7df">image_t</a>&amp; libretinex::Retinex::outputImage </td>
           <td>(</td>
-          <td class="paramname">&#160;)</td>
+          <td class="paramtype"><a class="el" href="classlibretinex_1_1_retinex.html#a37c1d6e43f2d8311cc095afdaebad964">Steps</a>&#160;</td>
+          <td class="paramname"> <em>stopAfter</em> = <code>DONE</code>&#160;)</td>
           <td></td>
         </tr>
       </table>
@@ -114,7 +184,16 @@ Public Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>The output image. </p>
-<p>The first call to this method will trigger the image processing. The next calls will just return a reference to the processed image. </p>
+<p>The first call to this method will trigger the image processing. The next calls will just return a reference to the processed image.</p>
+<p>Optionally, the stopAfter parameter can be used to realize an incomplete processing of the image. In this case, outputImage can be called with a further step to complete the treatment.</p>
+<dl class="warning"><dt><b>Warning:</b></dt><dd>If outputImage is called with a stopAfter value inferior to the previous one, the image will remains the same. I.e. it is impossible to go back in the process.</dd></dl>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stopAfter</td><td>can be used to ask for a non-complete processing which useful for debugging.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>the processed image </dd></dl>
 
 </div>
 </div>
