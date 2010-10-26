@@ -44,7 +44,9 @@ namespace libretinex
 
     double gaussian (coord_t x, coord_t y, double sigma) const;
     double DoG (coord_t x, coord_t y) const;
-    double F (coord_t x, coord_t y, double sigma) const;
+
+    vpMatrix buildGaussianCoeff (double sigma) const;
+    vpMatrix buildDoGCoeff () const;
 
     void applyLa (double sigma);
     void applyDoG ();

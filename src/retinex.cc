@@ -15,6 +15,7 @@
 
 #include <cmath>
 #include <boost/numeric/conversion/converter.hpp>
+#include <visp/vpImageFilter.h>
 #include "libretinex/retinex.hh"
 
 namespace libretinex
@@ -92,10 +93,20 @@ namespace libretinex
     return value;
   }
 
-  double
-  Retinex::F (coord_t x, coord_t y, double sigma) const
+  vpMatrix
+  Retinex::buildGaussianCoeff (double sigma) const
   {
-    return 42.;
+    vpMatrix res (1, 1);
+    res[0][0] = 1.;
+    return res;
+  }
+
+  vpMatrix
+  Retinex::buildDoGCoeff () const
+  {
+    vpMatrix res (1, 1);
+    res[0][0] = 1.;
+    return res;
   }
 
   void
@@ -104,10 +115,14 @@ namespace libretinex
     double mean = imageMean (outputImage_);
     value_t max = imageMax (outputImage_);
 
+    vpImage<double> filteredImage;
+    vpMatrix G_coeffs = buildGaussianCoeff (sigma);
+    vpImageFilter::filter (outputImage_, filteredImage, G_coeffs);
+
     for (coord_t i = 0; i < outputImage_.getHeight (); ++i)
       for (coord_t j = 0; j < outputImage_.getWidth (); ++j)
 	{
-	  double F = 42. + mean / 2.; //FIXME:
+	  double F = filteredImage (i, j) + mean / 2.;
 
 	  double value = outputImage_ (i, j) / (outputImage_ (i, j) + F);
 	  value *= max + F;
@@ -119,10 +134,14 @@ namespace libretinex
   void
   Retinex::applyDoG ()
   {
+    vpImage<double> filteredImage;
+    vpMatrix DoG_coeffs = buildDoGCoeff ();
+    vpImageFilter::filter (outputImage_, filteredImage, DoG_coeffs);
+
     for (coord_t i = 0; i < outputImage_.getHeight (); ++i)
       for (coord_t j = 0; j < outputImage_.getWidth (); ++j)
 	{
-	  double value = outputImage_ (i, j); //FIXME:
+	  double value = filteredImage (i, j);
 	  outputImage_ (i, j, toValueType::convert (value));
 	}
   }
