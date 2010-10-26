@@ -13,8 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with libretinex.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <cassert>
 #include <cmath>
 #include <limits>
+#include <boost/format.hpp>
 #include <boost/numeric/conversion/converter.hpp>
 #include <visp/vpImageFilter.h>
 #include "libretinex/retinex.hh"
@@ -71,26 +73,55 @@ namespace libretinex
     }
   } // end of anonymous namespace.
 
-  Retinex::Retinex (const image_t& image)
-    : done_ (false),
+  Retinex::Retinex (const image_t& image, unsigned verbosity)
+    : verbosity_ (verbosity),
+      step_ (NOTHING),
       outputImage_ (image)
-  {}
+  {
+    if (verbosity_ > 1)
+      std::cout << "Default constructor of Retinex." << std::endl;
+
+    if (verbosity_ > 1)
+      {
+	std::cout << "\tImage information:" << std::endl;
+	std::cout << "\tWidth = " << outputImage_.getWidth () << std::endl;
+	std::cout << "\tHeight = " << outputImage_.getHeight () << std::endl;
+      }
+  }
 
   Retinex::~Retinex ()
   {
   }
 
   const image_t&
-  Retinex::outputImage ()
+  Retinex::outputImage (Steps stopAfter)
   {
-    if (!done_)
+    if (verbosity_ > 1)
       {
-	applyLa (sigma_1);
-	applyLa (sigma_2);
-	applyDoG ();
-	applyNormalization ();
-	done_ = true;
+	std::cout << "Retinex::outputImage" << std::endl;
+	std::cout << "\tStop after: " << stopAfter << std::endl;
       }
+
+    if (stopAfter <= NOTHING)
+      return this->outputImage_;
+
+    applyLa (sigma_1);
+    if (stopAfter <= LA1)
+      return this->outputImage_;
+
+    applyLa (sigma_2);
+    if (stopAfter <= LA2)
+      return this->outputImage_;
+
+    applyDoG ();
+    if (stopAfter <= DOG)
+      return this->outputImage_;
+
+    applyNormalization ();
+    if (stopAfter <= NORMALIZE)
+      return this->outputImage_;
+
+    step_ = DONE;
     return this->outputImage_;
   }
 
@@ -155,8 +186,34 @@ namespace libretinex
   void
   Retinex::applyLa (double sigma)
   {
+    if (sigma == sigma_1)
+      {
+	if (step_ >= LA1)
+	  return;
+      }
+    else if (sigma == sigma_2)
+      {
+	if (step_ >= LA2)
+	  return;
+      }
+    else
+      assert (0 && "should never happen");
+
+    if (verbosity_ > 0)
+      {
+	boost::format fmt ("Apply logarithmic compression (sigma = %1%)");
+	fmt % sigma;
+	std::cout << fmt.str () << std::endl;
+      }
+
     double mean = imageMean (outputImage_);
     value_t max = imageMax (outputImage_);
+
+    if (verbosity_ > 1)
+      {
+	std::cout << "\tMean = " << mean << std::endl;
+	std::cout << "\tMax = " << static_cast<int> (max) << std::endl;
+      }
 
     vpImage<double> filteredImage;
     vpMatrix G_coeffs = buildGaussianCoeff (sigma);
@@ -172,11 +229,31 @@ namespace libretinex
 
 	  outputImage_ (i, j, toValueType::convert (value));
 	}
+
+
+    if (sigma == sigma_1)
+      {
+	if (step_ < LA1)
+	  step_ = LA1;
+      }
+    else if (sigma == sigma_2)
+      {
+	if (step_ < LA2)
+	  step_ = LA2;
+      }
+    else
+      assert (0 && "should never happen");
   }
 
   void
   Retinex::applyDoG ()
   {
+    if (step_ >= DOG)
+      return;
+
+    if (verbosity_ > 0)
+      std::cout << "Apply the difference of Gaussians filter." << std::endl;
+
     vpImage<double> filteredImage;
     vpMatrix DoG_coeffs = buildDoGCoeff ();
     vpImageFilter::filter (outputImage_, filteredImage, DoG_coeffs);
@@ -187,18 +264,34 @@ namespace libretinex
 	  double value = filteredImage (i, j);
 	  outputImage_ (i, j, toValueType::convert (value));
 	}
+
+    if (step_ < DOG)
+      step_ = DOG;
   }
 
   void
   Retinex::applyNormalization ()
   {
+    if (step_ >= NORMALIZE)
+      return;
+
     static const double Th = 5.;
+
+    if (verbosity_ > 0)
+      std::cout << "Apply normalization and post-processing." << std::endl;
 
     double mean = imageMean (outputImage_);
 
     // FIXME: is it really this?
     const double sigma_i_bip =
       std::fabs (imageMax (outputImage_) - imageMin (outputImage_));
+
+    if (verbosity_ > 1)
+      {
+	std::cout << "\tTh = " << Th << std::endl;
+	std::cout << "\tMean = " << mean << std::endl;
+	std::cout << "\tsigma_i_bip = " << sigma_i_bip << std::endl;
+      }
 
     for (coord_t i = 0; i < outputImage_.getHeight (); ++i)
       for (coord_t j = 0; j < outputImage_.getWidth (); ++j)
@@ -214,5 +307,10 @@ namespace libretinex
 
 	  outputImage_ (i, j, toValueType::convert (value));
 	}
+
+    if (step_ < NORMALIZE)
+      step_ = NORMALIZE;
   }
 } // end of namespace libretinex.
+
+//  LocalWords:  Gaussians

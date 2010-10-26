@@ -1,11 +1,11 @@
 =head1 NAME
 
-retinex-me - Stack of tasks shell
+retinex-me - Command line tool of the libretinex library.
 
 
 =head1 SYNOPSIS
 
-retinex-me -i infile -o outfile
+retinex-me [-h] [-a] [-v N] -i infile -o outfile
 
 
 =head1 DESCRIPTION
@@ -14,6 +14,12 @@ This programs uses the Retinex algorithm to normalize the luminance of
 an image.
 
 Two arguments are required: an input file and an output file.
+
+Optionnally, -a or --all can be passed to write in /tmp the images
+associated with intermediary steps of the algorithm.
+
+The flag -v or --verbosity controls how much information is displayed
+while processing the image (0 means quiet).
 
 Image reading and writing is delegated to the ViSP image processing
 library. This library currently supports JPEG, PNG and PNM (P5, P7)

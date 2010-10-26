@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with libretinex.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <boost/format.hpp>
 #include <boost/program_options.hpp>
 #include <visp/vpImageIo.h>
 
@@ -22,6 +23,8 @@ struct Options
 {
   std::string input;
   std::string output;
+  bool allSteps;
+  unsigned verbosity;
 };
 
 void
@@ -40,6 +43,14 @@ parseOptions (Options& options, int argc, char* argv[])
     ("output,o",
      po::value<std::string> (&options.output),
      "set the output image")
+
+    ("all,a",
+     po::value<bool> (&options.allSteps)->default_value (false),
+     "write images for all the steps of the algorithm")
+
+    ("verbosity,v",
+     po::value<unsigned> (&options.verbosity)->default_value (0),
+     "control the library verbosity")
     ;
 
   po::variables_map vm;
@@ -79,8 +90,21 @@ int main (int argc, char* argv[])
       exit (1);
     }
 
-  libretinex::Retinex retinex (image);
-  libretinex::image_t outputImage (retinex.outputImage ());
+  libretinex::Retinex retinex (image, options.verbosity);
+  libretinex::image_t outputImage = image;
+
+  for (int step = libretinex::Retinex::NOTHING;
+       step <= libretinex::Retinex::DONE; step += 1)
+    {
+      outputImage =
+	retinex.outputImage (static_cast<libretinex::Retinex::Steps> (step));
+      if (options.allSteps)
+	{
+	  boost::format fmt ("/tmp/retinex-me-%d.pgm");
+	  fmt % step;
+	  vpImageIo::write (outputImage, fmt.str ().c_str ());
+	}
+    }
 
   try
     {

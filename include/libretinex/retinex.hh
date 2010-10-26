@@ -38,17 +38,51 @@ namespace libretinex
   class LIBRETINEX_DLLAPI Retinex
   {
   public:
+    /// \brief Describe the different steps of the algorithm.
+    ///
+    /// Used to ask for a non-complete processing of the input image.
+    enum Steps
+    {
+      /// \brief Nothing has been done.
+      NOTHING = 0,
+      /// \brief The first logarithmic compression has been applied.
+      LA1,
+      /// \brief The second logarithmic compression has been applied.
+      LA2,
+      /// \brief The difference of Gaussians filter has been applied.
+      DOG,
+      /// \brief The normalization and post-processing steps has been applied.
+      NORMALIZE,
+      /// \brief Processing is finished (equivalent to NORMALIZE).
+      DONE = NORMALIZE
+    };
+
     /// \brief Instantiate the algorithm using an input image.
     ///
     /// \param image the input image (will not be modified).
-    explicit Retinex (const image_t& image);
+    /// \param verbosity controls how much information will be displayed
+    ///                  (0 means quiet).
+    explicit Retinex (const image_t& image, unsigned verbosity = 0);
     ~Retinex ();
 
     /// \brief The output image.
     ///
     /// The first call to this method will trigger the image processing.
     /// The next calls will just return a reference to the processed image.
-    const image_t& outputImage ();
+    ///
+    /// Optionally, the stopAfter parameter can be used to realize an
+    /// incomplete processing of the image. In this case, outputImage can
+    /// be called with a further step to complete the treatment.
+    ///
+    /// \warning If outputImage is called with a stopAfter value inferior
+    ///          to the previous one, the image will remains the same.
+    ///          I.e. it is impossible to go back in the process.
+    ///
+    /// \param stopAfter can be used to ask for a non-complete processing
+    ///                  which useful for debugging.
+    ///
+    /// \return the processed image
+    const image_t& outputImage (Steps stopAfter = DONE);
 
   private:
     /// \brief Standard deviation for the first logarithmic compression.
@@ -66,9 +100,11 @@ namespace libretinex
     /// H stands for horizontal (cells).
     static const double sigma_h = 4;
 
-    /// \brief False if processing has not been already done, true
-    /// otherwise.
-    bool done_;
+    /// \brief Verbosity level as set by the constructor.
+    unsigned verbosity_;
+
+    /// \brief Describe the last applied step.
+    Steps step_;
 
     /// \brief The processed image.
     ///
