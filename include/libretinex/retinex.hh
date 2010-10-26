@@ -21,13 +21,13 @@
 
 namespace libretinex
 {
+  typedef unsigned int coord_t;
+  typedef unsigned char value_t;
+  typedef vpImage<value_t> image_t;
+
   class LIBRETINEX_DLLAPI Retinex
   {
   public:
-    typedef unsigned int coord_t;
-    typedef unsigned char value_t;
-    typedef vpImage<value_t> image_t;
-
     explicit Retinex (const image_t& image);
     ~Retinex ();
 
@@ -48,7 +48,6 @@ namespace libretinex
     void applyLa (double sigma);
     void applyDoG ();
     void applyNormalization ();
-    void applyPP ();
   };
 } // end of namespace libretinex.
 

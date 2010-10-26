@@ -68,7 +68,7 @@ int main (int argc, char* argv[])
 
   parseOptions (options, argc, argv);
 
-  libretinex::Retinex::image_t image;
+  libretinex::image_t image;
   try
     {
       vpImageIo::read (image, options.input.c_str ());
@@ -80,7 +80,7 @@ int main (int argc, char* argv[])
     }
 
   libretinex::Retinex retinex (image);
-  libretinex::Retinex::image_t outputImage (retinex.outputImage ());
+  libretinex::image_t outputImage (retinex.outputImage ());
 
   try
     {
