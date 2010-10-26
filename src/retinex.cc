@@ -159,13 +159,30 @@ namespace libretinex
   {
     // From wikipedia: filter size should be 6 * sigma
     // http://en.wikipedia.org/w/index.php?title=Gaussian_blur&oldid=392439061
-    unsigned filterSize = toUnsignedInt::convert (std::ceil (6. * sigma));
+    const unsigned filterSize =
+      toUnsignedInt::convert (std::ceil (6. * sigma)) + 1;
+
+    // We add one to make sure the filterSize is uneven so G(0, 0) appears
+    // in the center of the coefficient matrix.
+    //
+    // (6 + 1) / 3 = 2 (for integers)
+    //    0         1         2         3        4        5        6
+    // 0  G(-3, -3) G(-2, -3) G(-1, -3) G(0, -3) G(1, -3) G(2, -3) G(3, -3)
+    // 1  G(-3, -2) G(-2, -2) G(-1, -2) G(0, -2) G(1, -2) G(2, -2) G(3, -2)
+    // 2  G(-3, -1) G(-2, -1) G(-1, -1) G(0, -1) G(1, -1) G(2, -1) G(3, -1)
+    // 3  G(-3,  0) G(-2,  0) G(-1,  0) G(0,  0) G(1,  0) G(2,  0) G(3,  0)
+    // 4  G(-3, +1) G(-2, +1) G(-1, +1) G(0, +1) G(1, +1) G(2, +1) G(3, +1)
+    // 5  G(-3, +2) G(-2, +2) G(-1, +2) G(0, +2) G(1, +2) G(2, +2) G(3, +2)
+    // 6  G(-3, -3) G(-2, +3) G(-1, +3) G(0, +3) G(1, +3) G(2, +3) G(3, +3)
+
+    const unsigned hw = filterSize / 2;
+    const unsigned hs = filterSize / 2;
 
     vpMatrix res (filterSize, filterSize);
 
     for (coord_t i = 0; i < filterSize; ++i)
       for (coord_t j = 0; j < filterSize; ++j)
-	res[j][i] = gaussian (i, j, sigma);
+	res[j][i] = gaussian (i - hw, j - hs, sigma);
     return res;
   }
 
@@ -173,13 +190,17 @@ namespace libretinex
   Retinex::buildDoGCoeff () const
   {
     // FIXME: I don't have any idea about what's the correct size here...
-    unsigned filterSize = toUnsignedInt::convert (std::ceil (6. * 1.));
+    unsigned filterSize =
+      toUnsignedInt::convert (std::ceil (6. * 1.)) + 1;
 
     vpMatrix res (filterSize, filterSize);
 
+    const unsigned hw = filterSize / 2;
+    const unsigned hs = filterSize / 2;
+
     for (coord_t i = 0; i < filterSize; ++i)
       for (coord_t j = 0; j < filterSize; ++j)
-	res[j][i] = DoG (i, j);
+	res[j][i] = DoG (i - hw, j - hs);
     return res;
   }
 
