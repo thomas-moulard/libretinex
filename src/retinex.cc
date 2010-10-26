@@ -14,6 +14,7 @@
 // along with libretinex.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cmath>
+#include <limits>
 #include <boost/numeric/conversion/converter.hpp>
 #include <visp/vpImageFilter.h>
 #include "libretinex/retinex.hh"
@@ -21,6 +22,7 @@
 namespace libretinex
 {
   typedef boost::numeric::converter<value_t,double> toValueType;
+  typedef boost::numeric::converter<unsigned int,double> toUnsignedInt;
 
   namespace
   {
@@ -42,6 +44,15 @@ namespace libretinex
       for (coord_t i = 0; i < image.getHeight (); ++i)
 	for (coord_t j = 0; j < image.getWidth (); ++j)
 	  res = std::max (res, image (i, j));
+      return res;
+    }
+
+    value_t imageMin (const image_t& image)
+    {
+      value_t res = std::numeric_limits<value_t>::max ();
+      for (coord_t i = 0; i < image.getHeight (); ++i)
+	for (coord_t j = 0; j < image.getWidth (); ++j)
+	  res = std::min (res, image (i, j));
       return res;
     }
   } // end of anonymous namespace.
@@ -96,16 +107,29 @@ namespace libretinex
   vpMatrix
   Retinex::buildGaussianCoeff (double sigma) const
   {
-    vpMatrix res (1, 1);
-    res[0][0] = 1.;
+    // From wikipedia: filter size should be 6 * sigma
+    // http://en.wikipedia.org/w/index.php?title=Gaussian_blur&oldid=392439061
+    unsigned filterSize = toUnsignedInt::convert (std::ceil (6. * sigma));
+
+    vpMatrix res (filterSize, filterSize);
+
+    for (coord_t i = 0; i < filterSize; ++i)
+      for (coord_t j = 0; j < filterSize; ++j)
+	res[j][i] = gaussian (i, j, sigma);
     return res;
   }
 
   vpMatrix
   Retinex::buildDoGCoeff () const
   {
-    vpMatrix res (1, 1);
-    res[0][0] = 1.;
+    // FIXME: I don't have any idea about what's the correct size here...
+    unsigned filterSize = toUnsignedInt::convert (std::ceil (6. * 1.));
+
+    vpMatrix res (filterSize, filterSize);
+
+    for (coord_t i = 0; i < filterSize; ++i)
+      for (coord_t j = 0; j < filterSize; ++j)
+	res[j][i] = DoG (i, j);
     return res;
   }
 
@@ -152,12 +176,16 @@ namespace libretinex
     static const double Th = 5.;
 
     double mean = imageMean (outputImage_);
+
+    // FIXME: is it really this?
+    const double sigma_i_bip =
+      std::fabs (imageMax (outputImage_) - imageMin (outputImage_));
+
     for (coord_t i = 0; i < outputImage_.getHeight (); ++i)
       for (coord_t j = 0; j < outputImage_.getWidth (); ++j)
 	{
 	  // Normalization
-	  double value = outputImage_ (i, j) - mean;
-	  value /= 42.; //FIXME: sigma_i?
+	  double value = (outputImage_ (i, j) - mean) / sigma_i_bip;
 
 	  // Post-processing.
 	  if (value >= 0)
