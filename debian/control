@@ -1,0 +1,73 @@
+Source: libretinex
+Priority: extra
+Maintainer: Thomas Moulard <thomas.moulard@gmail.com>
+Build-Depends: debhelper (>= 7.0.50~), cmake (>= 2.6),
+	       doxygen (>= 1.6.3),
+	       pkg-config (>= 0.22),
+	       perl (>= 5.10.1),
+	       libboost-dev (>= 1.40),
+	       libboost-program-options-dev (>= 1.40),
+	       libboost-system-dev (>= 1.40),
+	       libvisp-dev (>= 2.6)
+Standards-Version: 3.8.4
+Vcs-Git: git://github.com/laas/libretinex.git
+Vcs-browser: http://github.com/laas/libretinex
+Section: libs
+Homepage: http://github.com/laas/libretinex
+
+Package: libretinex-dev
+Section: libdevel
+Architecture: any
+Depends: libboost-dev (>= 1.40),
+	 libboost-program-options-dev (>= 1.40),
+	 libboost-system-dev (>= 1.40),
+	 libboost-filesystem-dev (>= 1.40),
+	 libvisp-dev (>= 2.6),
+	 libretinex0.1.0.99 (= ${binary:Version}), ${misc:Depends}
+Description: the Retinex library development package
+ This package implements an image processing algorithm for luminance
+ normalization in gray images as stated in:
+ ``Normalisation d'illumination basée sur un modèle de rétine:
+   application à la reconnaissance de visage.''
+ by Ngoc-Son Vu and Alice Caplier.
+ .
+ This package contains development files (headers and pkg-config file).
+
+
+Package: libretinex0.1.0.99
+Architecture: any
+Depends: libretinex0.1.0.99 (= ${binary:Version}),
+	 {shlibs:Depends}, ${misc:Depends}
+Description: the Retinex library.
+ This package implements an image processing algorithm for luminance
+ normalization in gray images as stated in:
+ ``Normalisation d'illumination basée sur un modèle de rétine:
+   application à la reconnaissance de visage.''
+ by Ngoc-Son Vu and Alice Caplier.
+ .
+ This package contains the unversioned shared libraries.
+
+Package: libretinex-doc
+Architecture: all
+Depends: ${misc:Depends}
+Description: the Retinex library documentation.
+ This package implements an image processing algorithm for luminance
+ normalization in gray images as stated in:
+ ``Normalisation d'illumination basée sur un modèle de rétine:
+   application à la reconnaissance de visage.''
+ by Ngoc-Son Vu and Alice Caplier.
+ .
+ This package contains the Doxygen documentation.
+
+Package: retinex0.1.0.99
+Architecture: any
+Depends: libretinex0.1.0.99 (= ${binary:Version}),
+	 ${shlibs:Depends}, ${misc:Depends}
+Description: the Retinex command line tool.
+ This package implements an image processing algorithm for luminance
+ normalization in gray images as stated in:
+ ``Normalisation d'illumination basée sur un modèle de rétine:
+   application à la reconnaissance de visage.''
+ by Ngoc-Son Vu and Alice Caplier.
+ .
+ This package contains the command line tool.
