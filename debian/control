@@ -23,7 +23,8 @@ Depends: libboost-dev (>= 1.40),
 	 libboost-system-dev (>= 1.40),
 	 libboost-filesystem-dev (>= 1.40),
 	 libvisp-dev (>= 2.6),
-	 libretinex0.1.0.99 (= ${binary:Version}), ${misc:Depends}
+	 libretinex0.1.0.99 (= ${binary:Version}),
+	 ${misc:Depends}
 Description: the Retinex library development package
  This package implements an image processing algorithm for luminance
  normalization in gray images as stated in:
@@ -36,8 +37,7 @@ Description: the Retinex library development package
 
 Package: libretinex0.1.0.99
 Architecture: any
-Depends: libretinex0.1.0.99 (= ${binary:Version}),
-	 {shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: the Retinex library.
  This package implements an image processing algorithm for luminance
  normalization in gray images as stated in:
@@ -48,6 +48,7 @@ Description: the Retinex library.
  This package contains the unversioned shared libraries.
 
 Package: libretinex-doc
+Section: doc
 Architecture: all
 Depends: ${misc:Depends}
 Description: the Retinex library documentation.
@@ -62,7 +63,8 @@ Description: the Retinex library documentation.
 Package: retinex0.1.0.99
 Architecture: any
 Depends: libretinex0.1.0.99 (= ${binary:Version}),
-	 ${shlibs:Depends}, ${misc:Depends}
+	 ${shlibs:Depends},
+	 ${misc:Depends}
 Description: the Retinex command line tool.
  This package implements an image processing algorithm for luminance
  normalization in gray images as stated in:
