@@ -16,22 +16,12 @@
 # Add required definitions.
 ADD_DEFINITIONS(${VISP_CFLAGS})
 
-# The shared library is being built right now.
-# Required for dllimport/dllexport mechanisms in
-# the generated header config.hh.
-ADD_DEFINITIONS(-DBUILDING_LIBRETINEX)
-
-# The main library.
-ADD_LIBRARY(libretinex
-  SHARED
-  retinex.cc
-  )
-
-# Set shared library version.
-SET_TARGET_PROPERTIES(libretinex PROPERTIES SOVERSION ${PROJECT_VERSION})
+# The main binary.
+ADD_EXECUTABLE(retinex-me retinex-me.cc)
 
 # Link against libraries.
-TARGET_LINK_LIBRARIES(libretinex ${VISP_LIBS})
-TARGET_LINK_LIBRARIES(libretinex ${Boost_LIBRARIES})
+TARGET_LINK_LIBRARIES(retinex-me libretinex)
+TARGET_LINK_LIBRARIES(retinex-me ${VISP_LIBS})
+TARGET_LINK_LIBRARIES(retinex-me ${Boost_LIBRARIES})
 
-INSTALL(TARGETS libretinex DESTINATION lib)
+INSTALL(TARGETS retinex-me DESTINATION bin)

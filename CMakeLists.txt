@@ -35,9 +35,13 @@ FIND_VISP()
 # Search for Boost.
 SET(Boost_USE_STATIC_LIBS OFF)
 SET(Boost_USE_MULTITHREAD ON)
-FIND_PACKAGE(Boost 1.40 COMPONENTS unit_test_framework REQUIRED)
+FIND_PACKAGE(Boost 1.40
+  COMPONENTS unit_test_framework system program_options REQUIRED)
 
 # Source files exploration
 ADD_SUBDIRECTORY(src)
+
+ADD_SUBDIRECTORY(bin)
+# ADD_SUBDIRECTORY(tests)
 
 SETUP_PROJECT_FINALIZE()
