@@ -38,6 +38,11 @@ SET(Boost_USE_MULTITHREAD ON)
 FIND_PACKAGE(Boost 1.40
   COMPONENTS unit_test_framework system program_options REQUIRED)
 
+# Install headers.
+SET(${PROJECT_NAME}_HEADERS
+    include/libretinex/retinex.hh
+)
+
 # Source files exploration
 ADD_SUBDIRECTORY(src)
 
