@@ -14,10 +14,13 @@
 // along with libretinex.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cmath>
+#include <boost/numeric/conversion/converter.hpp>
 #include "libretinex/retinex.hh"
 
 namespace libretinex
 {
+  typedef boost::numeric::converter<value_t,double> toValueType;
+
   namespace
   {
     double imageMean (const image_t& image)
@@ -60,13 +63,36 @@ namespace libretinex
     return this->outputImage_;
   }
 
-  value_t
+  double
   Retinex::gaussian (coord_t x, coord_t y, double sigma) const
   {
-    return 42.;
+    double twice_sigma_square = 2 * sigma * sigma;
+    double value = 1. / (M_PI * twice_sigma_square);
+    value *= std::exp (-1. * (x * x + y * y) / twice_sigma_square);
+    return value;
   }
 
-  value_t
+  double
+  Retinex::DoG (coord_t x, coord_t y) const
+  {
+    double value = 0.;
+    static const double inv_sigma_ph = 1. / sigma_ph;
+    static const double inv_sigma_h = 1. / sigma_h;
+
+    static const double sq_inv_sigma_ph = inv_sigma_ph * inv_sigma_ph;
+    static const double sq_inv_sigma_h = inv_sigma_h * inv_sigma_h;
+
+    double half_sq_dst = (x * x + y * y) / -2.;
+
+    value = inv_sigma_ph * std::exp (half_sq_dst * sq_inv_sigma_ph);
+
+    value -= inv_sigma_h * std::exp (half_sq_dst * sq_inv_sigma_h);
+
+    value *= 1. / (std::sqrt (2 * M_PI));
+    return value;
+  }
+
+  double
   Retinex::F (coord_t x, coord_t y, double sigma) const
   {
     return 42.;
@@ -86,7 +112,7 @@ namespace libretinex
 	  double value = outputImage_ (i, j) / (outputImage_ (i, j) + F);
 	  value *= max + F;
 
-	  outputImage_ (i, j, value);
+	  outputImage_ (i, j, toValueType::convert (value));
 	}
   }
 
@@ -97,7 +123,7 @@ namespace libretinex
       for (coord_t j = 0; j < outputImage_.getWidth (); ++j)
 	{
 	  double value = outputImage_ (i, j); //FIXME:
-	  outputImage_ (i, j, value);
+	  outputImage_ (i, j, toValueType::convert (value));
 	}
   }
 
@@ -120,7 +146,7 @@ namespace libretinex
 	  else
 	    value = -std::max (Th, -value);
 
-	  outputImage_ (i, j, value);
+	  outputImage_ (i, j, toValueType::convert (value));
 	}
   }
 } // end of namespace libretinex.

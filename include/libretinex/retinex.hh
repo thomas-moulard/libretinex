@@ -42,8 +42,9 @@ namespace libretinex
 
     image_t outputImage_;
 
-    value_t gaussian (coord_t x, coord_t y, double sigma) const;
-    value_t F (coord_t x, coord_t y, double sigma) const;
+    double gaussian (coord_t x, coord_t y, double sigma) const;
+    double DoG (coord_t x, coord_t y) const;
+    double F (coord_t x, coord_t y, double sigma) const;
 
     void applyLa (double sigma);
     void applyDoG ();
