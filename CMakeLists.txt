@@ -24,8 +24,6 @@ SET(PROJECT_VERSION 0.1.0.99)
 SET(PROJECT_DESCRIPTION "the Retinex algorithm")
 SET(PROJECT_URL "http://github.com/laas/libretinex")
 
-SET(CXX_DISABLE_WERROR True)
-
 SETUP_PROJECT()
 
 SET(PKG_CONFIG_LIBS "${PKG_CONFIG_LIBS} ${LIBINCL_KW}retinex${LIB_EXT}")

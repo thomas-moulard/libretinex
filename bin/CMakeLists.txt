@@ -20,7 +20,7 @@ ADD_DEFINITIONS(${VISP_CFLAGS})
 ADD_EXECUTABLE(retinex-me retinex-me.cc)
 
 # Link against libraries.
-TARGET_LINK_LIBRARIES(retinex-me libretinex)
+TARGET_LINK_LIBRARIES(retinex-me retinex)
 TARGET_LINK_LIBRARIES(retinex-me ${VISP_LIBS})
 TARGET_LINK_LIBRARIES(retinex-me ${Boost_LIBRARIES})
 
