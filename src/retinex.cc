@@ -18,6 +18,7 @@
 #include <limits>
 #include <boost/format.hpp>
 #include <boost/numeric/conversion/converter.hpp>
+#include <boost/scope_exit.hpp>
 #include <visp/vpImageFilter.h>
 #include "libretinex/retinex.hh"
 
@@ -94,8 +95,15 @@ namespace libretinex
   }
 
   const image_t&
-  Retinex::outputImage (Steps stopAfter)
+  Retinex::outputImage (Steps stopAfter, bool normalize)
   {
+    Retinex& retinex = *this;
+    BOOST_SCOPE_EXIT ((retinex) (normalize))
+      {
+	if (normalize)
+	  retinex.normalizeLuminance (retinex.outputImage_);
+      } BOOST_SCOPE_EXIT_END
+
     if (verbosity_ > 1)
       {
 	std::cout << "Retinex::outputImage" << std::endl;
@@ -331,6 +339,32 @@ namespace libretinex
 
     if (step_ < NORMALIZE)
       step_ = NORMALIZE;
+  }
+
+  void
+  Retinex::normalizeLuminance (image_t& image) const
+  {
+    if (verbosity_ > 0)
+      std::cout << "Normalize luminance" << std::endl;
+
+    static const value_t truncateThreshold = 0;
+    value_t min =
+      toValueType::convert (imageMin (image) + truncateThreshold);
+    value_t max =
+      toValueType::convert (imageMax (image) - truncateThreshold);
+
+    if (verbosity_ > 1)
+      {
+	std::cout << "\tMin = " << static_cast<int> (min) << std::endl;
+	std::cout << "\tMax = " << static_cast<int> (max) << std::endl;
+      }
+
+    for (unsigned i = 0; i < image.getWidth (); ++i)
+      for (unsigned j = 0; j < image.getHeight (); ++j)
+	{
+	  int c = ((image[j][i] - min) * 255) / (max - min);
+	  image[j][i] = toValueType::convert (c);
+	}
   }
 } // end of namespace libretinex.
 

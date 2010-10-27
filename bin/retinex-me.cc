@@ -102,9 +102,13 @@ int main (int argc, char* argv[])
 	{
 	  boost::format fmt ("/tmp/retinex-me-%d.pgm");
 	  fmt % step;
-	  vpImageIo::write (outputImage, fmt.str ().c_str ());
+	  libretinex::image_t tmpImage = outputImage;
+	  retinex.normalizeLuminance (tmpImage);
+	  vpImageIo::write (tmpImage, fmt.str ().c_str ());
 	}
     }
+
+  retinex.normalizeLuminance (outputImage);
 
   try
     {

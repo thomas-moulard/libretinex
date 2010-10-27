@@ -81,9 +81,14 @@ namespace libretinex
     /// \param stopAfter can be used to ask for a non-complete processing
     ///                  which useful for debugging.
     ///
+    /// \param normalize can be used to call normalizeLuminance after the
+    ///                  processing is done to redistribute the luminance
+    ///                  into the whole 0..255 range.
     /// \return the processed image
-    const image_t& outputImage (Steps stopAfter = DONE);
+    const image_t& outputImage (Steps stopAfter = DONE, bool normalize = false);
 
+    /// \brief Redistribute luminance to the whole 0..255 range.
+    void normalizeLuminance (image_t& image) const;
   private:
     /// \brief Standard deviation for the first logarithmic compression.
     static const double sigma_1 = 1.;
