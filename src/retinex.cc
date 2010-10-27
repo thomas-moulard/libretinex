@@ -240,10 +240,19 @@ namespace libretinex
     vpMatrix G_coeffs = buildGaussianCoeff (sigma);
     vpImageFilter::filter (outputImage_, filteredImage, G_coeffs);
 
+    coord_t G_coeffs_w = G_coeffs.getCols ();
+    coord_t G_coeffs_h = G_coeffs.getRows ();
+
     for (coord_t i = 0; i < outputImage_.getHeight (); ++i)
       for (coord_t j = 0; j < outputImage_.getWidth (); ++j)
 	{
 	  double F = filteredImage (i, j) + mean / 2.;
+
+	  if ((i < G_coeffs_h / 2)
+	      || (j < G_coeffs_w / 2)
+	      || (i + G_coeffs_h / 2 >= outputImage_.getHeight ())
+	      || (j + G_coeffs_w / 2 >= outputImage_.getWidth ()))
+	    F = outputImage_ (i, j) + mean / 2.;
 
 	  double value = outputImage_ (i, j) / (outputImage_ (i, j) + F);
 	  value *= max + F;
